@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../CSS/navbar.css">
 
 
-    <link rel="stylesheet" href="test.js">
+    <link rel="stylesheet" href="../JS/test.js">
 
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/fontawesome.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -155,6 +155,42 @@
 
     </div>
 
+
+    <!-- Footer -->
+    <div class="navbar fixed-bottom active-navbar" id="footer">
+
+        
+        <div class="container-fluid text-center text-md-left">
+    
+        
+            <div class="row">
+        
+                <div class="col-md-6 mt-md-0 mt-3">
+        
+                
+                <h5 class="text-uppercase">About Us</h5>
+                <p>Ce projet a été réalisé pour le cours de Web technology.</p>
+        
+                </div>
+                
+        
+                <hr class="clearfix w-100 d-md-none pb-3">
+        
+                
+                <div class="col-md-6 mb-md-0 mb-3">
+        
+                    
+                    <h5 class="text-uppercase">Contact</h5>
+        
+                </div>
+        
+            </div>
+    
+        </div>
+    
+    </div>
+    <!-- Footer -->
+
     <script src="https://www.markuptag.com/bootstrap/5/js/bootstrap.bundle.min.js"></script>
 
 
@@ -163,10 +199,12 @@
             var sidebar = document.querySelector("#sidebar");
             var container = document.querySelector(".my-container");
             var navbar = document.querySelector("#navbar");
+            var footer= document.querySelector("#footer");
             menu_btn.addEventListener("click", () => {
                 sidebar.classList.toggle("active-nav");
                 navbar.classList.toggle("active-navbar");
                 container.classList.toggle("active-cont");
+                footer.classList.toggle("active-navbar");
             });
     </script>
 </body>
