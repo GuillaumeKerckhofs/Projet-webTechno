@@ -72,6 +72,16 @@
         <!-- Navbar with menu,login & inscription button-->
 
 
+
+        <!-- Leaderboard -->
+        <div class="container" id="containerBoard">
+            <div id="buttonCreateBoard">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LeaderboardModal">Créer un leaderboard</button>
+            </div>
+        </div>
+        <!-- Leaderboard -->
+
+
         <!-- Login Modal -->
         <div id="loginModal" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -106,6 +116,7 @@
             </div>
         </div>
         <!-- Login Modal -->
+
 
 
         <!-- Inscription Modal -->
@@ -153,6 +164,46 @@
         <!-- Inscription Modal -->
 
 
+
+        <!-- Create Leaderboard Modal -->
+        <div id="LeaderboardModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+                    <div class="modal-body">
+                        <div class="form-title text-center">
+                            <h4>Créer un Leaderboard</h4>
+                        </div>
+                        <div class="d-flex flex-column text-center">
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="boardName"placeholder="Nom du leaderboard...">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <select>
+                                        <libellé>Quelle est la catégorie du leaderboard ?</libellé>
+                                        <option valeur="Localisation">Localisation d'objet</option>
+                                        <option valeur="Classification">Classification d'images</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="button" class="btn btn-info btn-block btn-round">Créer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Create Leaderboard Modal -->
+
+
     </div>
 
 
@@ -165,7 +216,7 @@
         
             <div class="row">
         
-                <div class="col-md-6 mt-md-0 mt-3">
+                <div class="col-md-6 mb-md-0 mb-3">
         
                 
                 <h5 class="text-uppercase">About Us</h5>
