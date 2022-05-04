@@ -14,7 +14,7 @@ def register(request):
 			user = form.save()
 			login(request, user)
 			messages.success(request, "Inscription réussi." )
-			return redirect("main:home")
+			return redirect("/home")
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = NewUserForm()
 	return render(request=request, template_name='gui/HTML/register.html', context={"register_form":form})
