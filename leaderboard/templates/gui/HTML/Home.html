@@ -24,7 +24,7 @@
                 <p>&nbsp;</p>
                 <p><h4>Catégories</h4></p>
                 <li>
-                    <a href="/Home">Accueil</a>
+                    <a href="/home">Accueil</a>
                 </li>
 
                 <li>
@@ -58,7 +58,7 @@
                     </li>
                     <h2>&nbsp;</h2>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+                        <a class="nav-link" href="#">Welcome, {{user.user_name}}</a>
                     </li>
 
                     {% else %}
@@ -87,9 +87,13 @@
 
         <!-- Leaderboard -->
         <div class="container" id="containerBoard">
-            <div id="buttonCreateBoard">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LeaderboardModal">Créer un leaderboard</button>
-            </div>
+            {% if user.is_authenticated %}
+                {% if user.is_dev %}
+                <div id="buttonCreateBoard">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LeaderboardModal">Créer un leaderboard</button>
+                </div>
+                {% endif %}
+            {% endif %}
             <h2>Les leaderboards</h2>
             </br>
             <h class="diplay-10">Localisation d'objets</h>

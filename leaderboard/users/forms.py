@@ -19,9 +19,13 @@ class NewUserForm(UserCreationForm):
 		return user
 
 class UserLoginForm(AuthenticationForm):
-	user_name=forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Pseudo'}))
-	password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'mot de passe'}))
-	fields=("user_name","password")
+	class Meta:
+		model = CustomUser
+		fields = ('username', 'password')
+
+	#user_name=forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Pseudo'}))
+	#password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'mot de passe'}))
+	#fields=("user_name","password")
 
 	#class Meta:
 	#	model = CustomUser
