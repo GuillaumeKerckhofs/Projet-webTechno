@@ -24,7 +24,7 @@
                 <p>&nbsp;</p>
                 <p><h4>Catégories</h4></p>
                 <li>
-                    <a href="/Home.html">Accueil</a>
+                    <a href="/Home">Accueil</a>
                 </li>
 
                 <li>
@@ -51,16 +51,32 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarConnexion" >
                 <ul class="nav navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <h2>&nbsp;</h2>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    <h2>&nbsp;</h2>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Welcome, {{user.username}}</a>
+                    </li>
+
+                    {% else %}
                     <h2>&nbsp;</h2>
                     <div id="buttonConnexion">
-                        <a href="/register"><button>S'inscrire</button></a>
+                        <a href="/login"><button>
+                            <i class="fa-solid fa-user"></i>
+                            <span>login</span>
+                        </button>
                     </div>
                     <h2>&nbsp;</h2>
                     <div id="buttonInscription">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inscriptionModal">
+                        <a href="/register"><button>
                             <i class="fa-solid fa-pen-to-square"></i>
                             <span>Inscription</span>
-                        </button>
+                        </button></a>
+                    </div>
+                    {% endif %}
                     </div>
                 </ul>
             </div>
@@ -95,90 +111,6 @@
             </div>
         </div>
         <!-- Leaderboard -->
-
-
-        <!-- Login Modal -->
-        <div id="loginModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header border-bottom-0">
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-
-                    <div class="modal-body">
-                        <div class="form-title text-center">
-                            <h4>Login</h4>
-                        </div>
-                        <div class="d-flex flex-column text-center">
-                            <form>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="pseudo1"placeholder="Votre pseudo...">
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" id="password1" placeholder="Votre mot de passe...">
-                                </div>
-                                <button type="button" class="btn btn-info btn-block btn-round">Se connecter</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-center">
-                        <div class="signup-section" id="inscriptionModalFooter">Pas encore inscrit ? <a data-bs-dismiss="modal" data-bs-toggle="modal" href="#inscriptionModal" class="text-info"> Inscrivez-vous !</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Login Modal -->
-
-
-
-        <!-- Inscription Modal -->
-        <div id="inscriptionModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header border-bottom-0">
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-
-                    <div class="modal-body">
-                        <div class="form-title text-center">
-                            <h4>Inscription</h4>
-                        </div>
-                        <div class="d-flex flex-column text-center">
-                            <form>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="pseudo2"placeholder="Votre pseudo...">
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" id="password2" placeholder="Votre mot de passe...">
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control" id="email" placeholder="Votre email...">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="nom" placeholder="Votre nom...">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" id="prenom" placeholder="Votre prénom...">
-                                </div>
-                                <button type="button" class="btn btn-info btn-block btn-round">S'inscrire</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer d-flex justify-content-center">
-                        <div class="signup-section" id="inscriptionModalFooter">Déjà membre ? <a data-bs-dismiss="modal" data-bs-toggle="modal" href="#loginModal" class="text-info"> Connectez-vous !</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Inscription Modal -->
-
-
 
         <!-- Create Leaderboard Modal -->
         <div id="LeaderboardModal" class="modal fade" tabindex="-1" role="dialog">

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from gui.views import homeView,register
+from gui.views import homeView,register_request,login_request,logout_request
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,6 +23,9 @@ app_name = "main"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', homeView),
     path('home/', homeView,name="home"),
-    path('register/', register,name="register"),
+    path('register/', register_request,name="register"),
+    path("login/", login_request, name="login"),
+    path("logout/",logout_request,name="logout")
 ]

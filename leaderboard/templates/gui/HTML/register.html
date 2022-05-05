@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inscription</title>
 </head>
 <body>
     {% block content %}
@@ -14,7 +14,13 @@
         <h1>Inscription</h1>
         <form method="POST">
             {% csrf_token %}
-            {{ register_form|crispy }}
+            {{ register_form.user_name|as_crispy_field }}
+            {{ register_form.password1|as_crispy_field }}
+            {{ register_form.password2|as_crispy_field }}
+            {{ register_form.email|as_crispy_field }}
+            {{ register_form.last_name|as_crispy_field }}
+            {{ register_form.first_name|as_crispy_field }}
+            {{ register_form.is_dev|as_crispy_field }}
             <button class="btn btn-primary" type="submit">S'inscrire</button>
         </form>
         <p class="text-center>"> <a ref="/login">Déjà membre ? Connectez-vous !</a></p>
