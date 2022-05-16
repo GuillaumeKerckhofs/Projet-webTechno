@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'gui',
     'users',
     'crispy_forms',
+    'bootstrap5',
 ]
 
 

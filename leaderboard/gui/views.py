@@ -8,7 +8,7 @@ from django.contrib.auth import login,authenticate,logout
 
 # Create your views here.
 def homeView(request):
-    return render(request,'gui/HTML/Home.html')
+    return render(request,'gui/HTML/homeTest.html')
 
 def register_request(request):
 	if request.method == "POST":

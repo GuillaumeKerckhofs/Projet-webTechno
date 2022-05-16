@@ -22,6 +22,8 @@ class CustomAccountManager(BaseUserManager):
 
     def create_user(self, email, user_name, first_name, last_name, password, **other_fields):
 
+        other_fields.setdefault('is_active', True)
+
         if not email:
             raise ValueError(_('You must provide an email address'))
 
