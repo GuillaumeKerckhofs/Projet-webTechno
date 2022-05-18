@@ -55,8 +55,7 @@
                                 Admin
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="superDropdown">
-                                <li><a class="dropdown-item" href="/admin}">{% trans "Admin site" %}</a></li>
-    
+                                <li><a class="dropdown-item" href="/admin">site Admin</a></li>
                             </ul>
                             </div>
                         {% endif %}
@@ -66,7 +65,8 @@
                                 Compte
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="insideDropdown">
-                                <li><a class="dropdown-item" href="/logout">{% trans "Sign Out" %}</a></li>
+                                <li><a class="dropdown-item" href="/profil">Profil</a></li>
+                                <li><a class="dropdown-item" href="/logout">Se déconnecter</a></li>
                             </ul>
                         </div>
     
@@ -95,7 +95,9 @@
                     <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Localisation</a>
                     {% if not user.is_authenticated %}
                         <a href="/login" class="umons_grey_btn mobile">Se connecter</a>    
-                        <a href="/regisyer" class="umons_grey_btn mobile">S'inscrire'</a> 
+                        <a href="/regisyer" class="umons_grey_btn mobile">S'inscrire'</a>
+                    {% else %}
+                        <a href="/teamProfil" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Equipe</a>
                     {% endif %}
                 </div>
 

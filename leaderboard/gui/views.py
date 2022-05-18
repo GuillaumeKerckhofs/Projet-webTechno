@@ -51,3 +51,9 @@ def login_request(request):
 def logout_request(request):
 	logout(request)
 	return redirect(homeView)
+
+def profil_view(request):
+	return render(request,'gui/HTML/profil.html')
+
+def teamProfil_view(request):
+	return render(request,'gui/HTML/TeamProfil.html')
