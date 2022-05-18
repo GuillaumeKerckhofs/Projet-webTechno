@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
+{% extends "gui/HTML/base.html" %}
 
-    {% block content %}      
+{% load bootstrap5 %}
 
-    {% load crispy_forms_tags %}
+{% block title %} {% endblock %}
+
+{% block content %}      
+
+{% load crispy_forms_tags %}
 
     <!--Login--> 
     <div class="container py-5">
@@ -21,6 +19,4 @@
     <p class="text-center">Pas encore inscrit ? <a ref="/register"> Inscrivez-vous !</a></p>
     </div>
 
-    {% endblock %}
-</body>
-</html>
+{% endblock %}

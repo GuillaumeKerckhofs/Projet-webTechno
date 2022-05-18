@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Inscription</title>
-</head>
-<body>
-    {% block content %}
+{% extends "gui/HTML/base.html" %}
 
-    {% load crispy_forms_tags %}
+{% load bootstrap5 %}
+
+{% block title %} {% endblock %}
+{% block content %}
+
+{% load crispy_forms_tags %}
 
     <!--Register-->
     <div class="container py-5">
@@ -27,6 +25,4 @@
         <p class="text-center>"> <a ref="/login">Déjà membre ? Connectez-vous !</a></p>
     </div>
 
-    {% endblock %}
-</body>
-</html>
+{% endblock %}
