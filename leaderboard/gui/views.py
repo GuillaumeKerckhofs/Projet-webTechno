@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect
-from users.forms import NewUserForm,UserLoginForm
+from users.forms import NewUserForm,UserLoginForm,customUserChangeForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib import messages
@@ -32,13 +32,8 @@ def login_request(request):
 			user = authenticate(username=username, password=password)
 			if user is not None:
 				if user.is_active:
-					print("login réussi")
 					login(request, user)
 					return redirect(homeView)
-				else:
-					print("compte inactif")
-			else:
-				print("login raté")
 		else:
 			print(form.errors)
 
@@ -46,6 +41,17 @@ def login_request(request):
 	else:
 		form=UserLoginForm()
 	return render(request=request, template_name='gui/HTML/login.html', context={"login_form":form})
+
+def edit_profile(request):
+    if request.method == 'POST':
+        form = customUserChangeForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect(profil_view)
+    else:
+         form = customUserChangeForm(instance=request.user)
+    return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form})
 
 
 def logout_request(request):

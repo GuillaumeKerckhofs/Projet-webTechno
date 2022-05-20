@@ -1,0 +1,28 @@
+{% extends "gui/HTML/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block title %} {% endblock %}
+
+{% block content %}      
+
+{% load crispy_forms_tags %}
+
+    {% if user.is_authenticated %}
+    <!--Edit profile--> 
+        <div class="container py-5">
+        <h1>Modifier mes informations</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ edit_form.email|as_crispy_field }}
+            {{ edit_form.last_name|as_crispy_field }}
+            {{ edit_form.first_name|as_crispy_field }}
+            {{ edit_form.is_dev|as_crispy_field }}
+            <button class="btn btn-primary" type="submit">Modifier</button>
+        </form>
+        </div>
+    {% else %}
+        <h1>Vous n'êtes pas connecté, connectez-vous avant !</h1>
+        <a href="/login"> Se connecter ici !</a>
+    {% endif %}
+{% endblock %}

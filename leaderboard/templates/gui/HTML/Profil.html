@@ -7,27 +7,33 @@
 
         <!-- Informations -->
         <div class="container" id="Informations">
-            <h class="diplay-10">Profil</h>
             </br>
             {% if user.is_authenticated %}
-                <li>Pseudo: {{ user.user_name }}</li>
-                <li>Nom complet: {{ user.first_name }} {{ user.last_name }}</li>
-                <li>Email: {{ user.email }}</li>
-
-                <div class="col-md-6 mb-md-6 mb-6">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profilModal">
-                        Modifier mes informations
-                    </button>
+                <div class="card p-4">
+                    <h4 class="card-title font-weight-bold text-center">Profil de {{ user.first_name }} {{ user.last_name }}</h4>
+                    <hr>
+                    <div class="card-text">
+                        <p class="text-muted mb-0" style="font-size: 12px">Nom:</p>
+                        <p>{{ user.last_name }}</p>
+                        <p class="text-muted mb-0" style="font-size: 12px">Prénom:</p>
+                        <p>{{ user.first_name }}</p>
+                        <p class="text-muted mb-0" style="font-size: 12px">Email:</p>
+                        <p>{{ user.email }} </p>
+                    </div>
                 </div>
+
+                </br>
+                <div>
+                    <a href="/profil/edit">Modifier mes informations </a>
+                </div>
+            </br>
             {% endif %}
 
             <h class="diplay-10">Mes équipes</h>
 
-
-            <div class="col-md-6 mb-md-6 mb-6">
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamModal">
-                    Créer une équipe
-                </button>
+            </br>
+            <div>
+                <a href="#">Créer une équipe </a>
             </div>
 
         </div>

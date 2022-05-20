@@ -37,3 +37,8 @@ class UserLoginForm(AuthenticationForm):
 	#			password=self.cleaned_data('password')
 	#			if not authenticate(user_name=user_name,password=password):
 	#				raise forms.ValidationError("Invalid LOGIN")
+
+class customUserChangeForm(UserChangeForm):
+	class Meta:
+		model = CustomUser
+		fields = ("email","first_name","last_name","is_dev")
