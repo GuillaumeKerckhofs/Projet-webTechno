@@ -5,11 +5,29 @@ from django.views.generic.edit import CreateView
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.decorators import login_required,user_passes_test
+from django.conf import settings
+
+def anonymous_required(function=None, redirect_url=None):
+
+   if not redirect_url:
+       redirect_url = settings.LOGIN_REDIRECT_URL
+
+   actual_decorator = user_passes_test(
+       lambda u: u.is_anonymous,
+       login_url=redirect_url
+   )
+
+   if function:
+       return actual_decorator(function)
+   return actual_decorator
 
 # Create your views here.
 def homeView(request):
     return render(request,'gui/HTML/home.html')
 
+
+@anonymous_required
 def register_request(request):
 	if request.method == "POST":
 		form = NewUserForm(request.POST)
@@ -23,6 +41,7 @@ def register_request(request):
 	return render(request=request, template_name='gui/HTML/register.html', context={"register_form":form})
 
 
+@anonymous_required
 def login_request(request):
 	if request.method == "POST":
 		form= UserLoginForm(request.POST,request.POST)
@@ -42,22 +61,25 @@ def login_request(request):
 		form=UserLoginForm()
 	return render(request=request, template_name='gui/HTML/login.html', context={"login_form":form})
 
-def edit_profile(request):
-    if request.method == 'POST':
-        form = customUserChangeForm(request.POST, instance=request.user)
 
-        if form.is_valid():
-            form.save()
-            return redirect(profil_view)
-    else:
-         form = customUserChangeForm(instance=request.user)
-    return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form})
+@login_required
+def edit_profile(request):
+	if request.method == 'POST':
+		form = customUserChangeForm(request.POST, instance=request.user)
+
+		if form.is_valid():
+			form.save()
+			return redirect(profil_view)
+	else:
+		form = customUserChangeForm(instance=request.user)
+	return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form})
 
 
 def logout_request(request):
 	logout(request)
 	return redirect(homeView)
 
+@login_required
 def profil_view(request):
 	return render(request,'gui/HTML/profil.html')
 
