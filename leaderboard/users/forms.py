@@ -9,7 +9,15 @@ class NewUserForm(UserCreationForm):
 
 	class Meta:
 		model = CustomUser
-		fields = ("user_name", "email","first_name","last_name", "password1", "password2",'is_active', 'is_staff',"is_dev")
+		fields = ("user_name", "email","first_name","last_name", "password1", "password2", 'is_staff',"is_dev")
+
+		labels = {
+            'user_name': 'Pseudo',
+			'email': 'Email',
+			'first_name': 'Prénom',
+			'last_name': 'Nom',
+			'is_dev': 'Etes-vous un développeur ?',
+        }
 
 	def save(self, commit=True):
 		user = super(NewUserForm, self).save(commit=False)
@@ -21,7 +29,10 @@ class NewUserForm(UserCreationForm):
 class UserLoginForm(AuthenticationForm):
 	class Meta:
 		model = CustomUser
-		fields = ('username', 'password')
+		fields = ('user_name', 'password')
+		labels = {
+            'user_name': 'Pseudo',
+        }
 
 	#user_name=forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Pseudo'}))
 	#password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'mot de passe'}))
@@ -42,3 +53,9 @@ class customUserChangeForm(UserChangeForm):
 	class Meta:
 		model = CustomUser
 		fields = ("email","first_name","last_name","is_dev")
+		labels = {
+			'email': 'Email',
+			'first_name': 'Prénom',
+			'last_name': 'Nom',
+			'is_dev': 'Etes-vous un développeur ?',
+        }
