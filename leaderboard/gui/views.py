@@ -1,5 +1,5 @@
 from django.shortcuts import  render, redirect
-from users.forms import NewUserForm,UserLoginForm,customUserChangeForm
+from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,createTeamForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib import messages
@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
+from users.models import Membership,Team
 
 def anonymous_required(function=None, redirect_url=None):
 
@@ -24,7 +25,11 @@ def anonymous_required(function=None, redirect_url=None):
 
 # Create your views here.
 def homeView(request):
-    return render(request,'gui/HTML/home.html')
+	context={}
+	if request.user.is_authenticated:
+		membership=Membership.objects.filter(member=request.user)
+		context={'membership': membership}
+	return render(request,'gui/HTML/home.html',context)
 
 
 @anonymous_required
@@ -64,6 +69,7 @@ def login_request(request):
 
 @login_required
 def edit_profile(request):
+	membership=Membership.objects.filter(member=request.user)
 	if request.method == 'POST':
 		form = customUserChangeForm(request.POST, instance=request.user)
 
@@ -72,16 +78,49 @@ def edit_profile(request):
 			return redirect(profil_view)
 	else:
 		form = customUserChangeForm(instance=request.user)
-	return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form})
+	return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form,'membership': membership})
 
 
+@login_required
 def logout_request(request):
 	logout(request)
 	return redirect(homeView)
 
 @login_required
 def profil_view(request):
-	return render(request,'gui/HTML/profil.html')
+	membership=Membership.objects.filter(member=request.user)
+	context = {'membership': membership}
+	return render(request,'gui/HTML/profil.html',context)
+
+@login_required
+def createTeam_request(request):
+	membership=Membership.objects.filter(member=request.user)
+	if request.method == 'POST':
+		form = createTeamForm(request.POST)
+
+		if form.is_valid():
+			teamForm=form.save()
+			membership=Membership.objects.create(member=request.user,team=teamForm,role=Membership.OWNER)
+			return redirect(profil_view)
+	else:
+		form = createTeamForm()
+	return render(request,template_name='gui/HTML/createTeam.html',context={'createTeam_form':form,'membership': membership})
+
 
 def teamProfil_view(request):
-	return render(request,'gui/HTML/TeamProfil.html')
+	team=Team.objects.all()
+	waiting_team=[]
+	if request.user.is_authenticated:
+		new_team=[]
+		for t in team:
+			try:
+				membership=Membership.objects.get(member=request.user,team=t)
+				if membership:
+					if membership.role==4:
+						waiting_team.append(t)
+			except:	
+				new_team.append(t)
+		team=new_team
+		
+	context={'team': team,'waiting_team':waiting_team}
+	return render(request,'gui/HTML/TeamProfil.html',context)

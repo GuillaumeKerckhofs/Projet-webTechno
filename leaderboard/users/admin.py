@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser,Team,Membership
 from django.contrib.auth.admin import UserAdmin
 from django.forms import TextInput, Textarea
 
@@ -24,5 +24,10 @@ class UserAdminConfig(UserAdmin):
          ),
     )
 
+class MyAdminView(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        super(MyAdminView, self).save_model(request, obj, form, change)
 
 admin.site.register(CustomUser, UserAdminConfig)
+admin.site.register(Team)
+admin.site.register(Membership)

@@ -8,7 +8,6 @@
         <!-- Informations -->
         <div class="container" id="Informations">
             </br>
-            {% if user.is_authenticated %}
                 <div class="card p-4">
                     <h4 class="card-title font-weight-bold text-center">Mon Profil</h4>
                     <hr>
@@ -27,13 +26,32 @@
                     <a href="/profil/edit">Modifier mes informations </a>
                 </div>
             </br>
-            {% endif %}
 
-            <h class="diplay-10">Mes équipes</h>
-
+            <div class="card p-4">
+                <h4 class="card-title font-weight-bold text-center">Mes équipes</h4>
+                <hr>
+                <div class="card-text">
+                    <table>
+                        <tr>
+                            <td>Nom</td>
+                            <td>Role</td>
+                            <td>Rejoint le</td>
+                        </tr>
+                        {% for membersh in membership %}
+                            {% if membersh.role < 4 %}
+                                <tr>
+                                    <td><a href="#">{{membersh.team.name}} </a>: </td>
+                                    <td> {{membersh.getRole}} </td>
+                                    <td>  {{membersh.date_joined}}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
             </br>
             <div>
-                <a href="#">Créer une équipe </a>
+                <a href="/createTeam">Créer une équipe </a>
             </div>
 
         </div>

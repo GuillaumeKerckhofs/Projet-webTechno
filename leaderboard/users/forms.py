@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,AuthenticationForm
-from .models import CustomUser
+from .models import CustomUser,Team,Membership
+from django.forms import ModelForm
 
 
 # Create your forms here.
@@ -59,3 +60,13 @@ class customUserChangeForm(UserChangeForm):
 			'last_name': 'Nom',
 			'is_dev': 'Etes-vous un développeur ?',
         }
+
+class createTeamForm(ModelForm):
+
+	class Meta:
+		model=Team
+		fields=["name"]
+		labels={
+			'name': 'Nom de l\'équipe',
+		}
+	

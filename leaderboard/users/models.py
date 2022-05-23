@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from datetime import datetime  
 
 
 class CustomAccountManager(BaseUserManager):
@@ -52,3 +53,39 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.user_name
+
+class Team(models.Model):
+    name=models.CharField(max_length=150, unique=True)
+    members=models.ManyToManyField(CustomUser,through="Membership")
+
+    def __str__(self):
+        return self.name
+
+class Membership(models.Model):
+
+    OWNER = 1
+    ADMIN = 2
+    MEMBER = 3
+    PENDING = 4
+      
+    ROLE_CHOICES = (
+        (OWNER, 'Propriétaire'),
+        (ADMIN, 'Admin'),
+        (MEMBER, 'Membre'),
+        (PENDING,'En attente')
+    )
+
+    member = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    date_joined = models.DateField(default=datetime.now, blank=True)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=PENDING)
+
+    def getRole(self):
+        if(self.role==1):
+            return 'Propriétaire'
+        elif(self.role==2):
+            return 'Admin'
+        elif(self.role==3):
+            return 'Membre'
+        else:
+            return 'En attente'
