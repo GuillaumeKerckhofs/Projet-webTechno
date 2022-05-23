@@ -3,25 +3,38 @@
 {% load bootstrap5 %}
 
 {% block title %} {% endblock %}
-
 {% block content %}
-
 
         <!-- Informations -->
         <div class="container" id="Informations">
-            <h2>Liste de toutes les équipes</h2>
+            </br>
+                <div class="card p-4">
+                    <h4 class="card-title font-weight-bold text-center">Equipe : {{team.name}}</h4>
+                    <hr>
+                    <div class="card-text">
 
-            {% for wt in waiting_team %}
-                <p>{{wt.name}}</p>
-                <p> En attente d'un réponse</p>
-            {% endfor %}
+                        <table>
+                            <tr>
+                                <td>Nom</td>
+                                <td>Role</td>
+                                <td>Rejoint le</td>
+                            </tr>
+                            {% for m in membership %}
+                                <tr>
+                                    <td>{{m.member.last_name}} {{m.member.first_name}} </td>
+                                    <td> {{m.getRole}} </td>
+                                    <td>  {{m.date_joined}}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
 
-            {% for t in team %}
-                <p>{{t.name}}</p>
-                {% if user.is_authenticated %}
-                    <a href="#"> Demande de rejoindre</a>
+                </br>
+                {% if role == 1 %}
+                    <a href="#"> Supprimer équipe</a>
                 {% endif %}
-            {% endfor %}
+            </br>
 
         </div>
         <!-- Informations -->

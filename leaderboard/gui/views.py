@@ -107,9 +107,10 @@ def createTeam_request(request):
 	return render(request,template_name='gui/HTML/createTeam.html',context={'createTeam_form':form,'membership': membership})
 
 
-def teamProfil_view(request):
+def allTeamProfil_view(request):
 	team=Team.objects.all()
 	waiting_team=[]
+
 	if request.user.is_authenticated:
 		new_team=[]
 		for t in team:
@@ -123,4 +124,28 @@ def teamProfil_view(request):
 		team=new_team
 		
 	context={'team': team,'waiting_team':waiting_team}
-	return render(request,'gui/HTML/TeamProfil.html',context)
+	return render(request,'gui/HTML/allTeamProfil.html',context)
+
+def teamProfil_view(request,team_id):
+	try:
+		team=Team.objects.get(id=team_id)
+		membership=Membership.objects.filter(team=team)
+		if not request.user.is_authenticated:
+			context={'team': team,'membership':membership}
+			return render(request,'gui/HTML/teamProfil.html',context)
+
+		else:
+			try:
+				membership=Membership.objects.filter(team=team,member=request.user)
+				role=membership.role
+				print(role)
+				context={'team': team,'membership':membership,'role':role}
+				return render(request,'gui/HTML/teamProfil.html',context)
+			except:
+				role=5
+				print(role)
+				context={'team': team,'membership':membership,'role':role}
+				return render(request,'gui/HTML/teamProfil.html',context)
+
+	except Team.DoesNotExist:
+		return render(request, 'gui/HTML/teamProfil.html', {'error': 'Equipe pas trouvée.'})

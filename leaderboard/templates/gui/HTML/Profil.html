@@ -40,7 +40,7 @@
                         {% for membersh in membership %}
                             {% if membersh.role < 4 %}
                                 <tr>
-                                    <td><a href="#">{{membersh.team.name}} </a>: </td>
+                                    <td><a href="{% url 'teamProfil' membersh.team.id %}">{{membersh.team.name}} </a> </td>
                                     <td> {{membersh.getRole}} </td>
                                     <td>  {{membersh.date_joined}}</td>
                                 </tr>

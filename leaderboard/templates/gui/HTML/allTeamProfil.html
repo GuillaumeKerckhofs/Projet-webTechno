@@ -1,0 +1,30 @@
+{% extends "gui/HTML/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+
+        <!-- Informations -->
+        <div class="container" id="Informations">
+            <h2>Liste de toutes les équipes</h2>
+
+            {% for wt in waiting_team %}
+                <p>{{wt.name}}</p>
+                <p> En attente d'un réponse</p>
+            {% endfor %}
+
+            {% for t in team %}
+                <p><a href="{% url 'teamProfil' t.id %}">{{t.name}}</a></p>
+                {% if user.is_authenticated %}
+                    <a href="#"> Demande de rejoindre</a>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+        <!-- Informations -->
+
+
+{% endblock %}
