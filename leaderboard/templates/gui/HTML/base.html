@@ -97,9 +97,10 @@
                     {% if not user.is_authenticated %}
                         <a href="/login" class="umons_grey_btn mobile">Se connecter</a>    
                         <a href="/regisyer" class="umons_grey_btn mobile">S'inscrire'</a>
-                        <a href="/teamProfil" class="umons_grey_btn">Liste des équipes</a>
                     {% else %}
-                        <a href="/teamProfil" class="umons_grey_btn">Recherche d'équipe</a>
+                        {% if user.is_dev %}
+                            <a href="#">Créer un leaderboard</a>
+                        {% endif %}
                     {% endif %}
                 </div>
 

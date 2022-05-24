@@ -1,6 +1,6 @@
 from django.shortcuts import  render, redirect
 from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,createTeamForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import CreateView
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,6 +8,48 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
 from users.models import Membership,Team
+
+def getTeam(team_id):
+	try:
+		team=Team.objects.get(id=team_id)
+	except:
+		team=None
+	return team
+
+def getAllTeam(user):
+	membership=Membership.objects.all()
+	team=Team.objects.all()
+	waiting_team=[]
+	user_team=[]
+	other_team=[]
+
+	for t in team:
+		try:
+			membership=Membership.objects.get(member=user,team=t)
+			if membership:
+				if membership.role==4:
+					waiting_team.append(t)
+				else:
+					user_team.append(membership)
+		except:	
+			other_team.append(t)
+	return user_team,waiting_team,other_team
+
+def getRelation(user,team):
+	try:
+		membership=Membership.objects.get(member=user,team=team)
+	except:
+		membership=None
+	return membership
+
+def getMembership(id):
+	try:
+		membership=Membership.objects.get(id=id)
+	except:
+		membership=None
+	return membership
+
+
 
 def anonymous_required(function=None, redirect_url=None):
 
@@ -23,13 +65,14 @@ def anonymous_required(function=None, redirect_url=None):
        return actual_decorator(function)
    return actual_decorator
 
+
+
+
+
+
 # Create your views here.
 def homeView(request):
-	context={}
-	if request.user.is_authenticated:
-		membership=Membership.objects.filter(member=request.user)
-		context={'membership': membership}
-	return render(request,'gui/HTML/home.html',context)
+	return render(request,'gui/HTML/home.html')
 
 
 @anonymous_required
@@ -69,7 +112,6 @@ def login_request(request):
 
 @login_required
 def edit_profile(request):
-	membership=Membership.objects.filter(member=request.user)
 	if request.method == 'POST':
 		form = customUserChangeForm(request.POST, instance=request.user)
 
@@ -78,7 +120,7 @@ def edit_profile(request):
 			return redirect(profil_view)
 	else:
 		form = customUserChangeForm(instance=request.user)
-	return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form,'membership': membership})
+	return render(request,template_name='gui/HTML/edit.html',context={'edit_form':form})
 
 
 @login_required
@@ -88,13 +130,13 @@ def logout_request(request):
 
 @login_required
 def profil_view(request):
-	membership=Membership.objects.filter(member=request.user)
-	context = {'membership': membership}
+	user_team,waiting_team,other_team=getAllTeam(request.user)
+	context = {'user_team': user_team,'waiting_team':waiting_team,'other_team':other_team}
+
 	return render(request,'gui/HTML/profil.html',context)
 
 @login_required
 def createTeam_request(request):
-	membership=Membership.objects.filter(member=request.user)
 	if request.method == 'POST':
 		form = createTeamForm(request.POST)
 
@@ -104,48 +146,53 @@ def createTeam_request(request):
 			return redirect(profil_view)
 	else:
 		form = createTeamForm()
-	return render(request,template_name='gui/HTML/createTeam.html',context={'createTeam_form':form,'membership': membership})
+	return render(request,template_name='gui/HTML/createTeam.html',context={'createTeam_form':form})
 
-
-def allTeamProfil_view(request):
-	team=Team.objects.all()
-	waiting_team=[]
-
-	if request.user.is_authenticated:
-		new_team=[]
-		for t in team:
-			try:
-				membership=Membership.objects.get(member=request.user,team=t)
-				if membership:
-					if membership.role==4:
-						waiting_team.append(t)
-			except:	
-				new_team.append(t)
-		team=new_team
-		
-	context={'team': team,'waiting_team':waiting_team}
-	return render(request,'gui/HTML/allTeamProfil.html',context)
-
+@login_required
 def teamProfil_view(request,team_id):
-	try:
-		team=Team.objects.get(id=team_id)
+	team=getTeam(team_id)
+	if(team is not None):
 		membership=Membership.objects.filter(team=team)
-		if not request.user.is_authenticated:
-			context={'team': team,'membership':membership}
+		m=getRelation(request.user,team)
+		if(m is not None):
+			role=m.role
+			context={'team': team,'membership':membership,'role':role}
+			return render(request,'gui/HTML/teamProfil.html',context)
+		else:
+			role=5
+			context={'team': team,'membership':membership,'role':role}
 			return render(request,'gui/HTML/teamProfil.html',context)
 
-		else:
-			try:
-				membership=Membership.objects.filter(team=team,member=request.user)
-				role=membership.role
-				print(role)
-				context={'team': team,'membership':membership,'role':role}
-				return render(request,'gui/HTML/teamProfil.html',context)
-			except:
-				role=5
-				print(role)
-				context={'team': team,'membership':membership,'role':role}
-				return render(request,'gui/HTML/teamProfil.html',context)
-
-	except Team.DoesNotExist:
+	else:
 		return render(request, 'gui/HTML/teamProfil.html', {'error': 'Equipe pas trouvée.'})
+
+@login_required
+def joinTeam(request,team_id):
+	team=getTeam(team_id)
+	if(team is not None):
+		membership = getRelation(request.user,team)
+		if(membership is not None):
+			return redirect(profil_view)
+		else:
+			membership = Membership.objects.create(member=request.user,team=team)
+			return redirect(profil_view)
+	else:
+		return render(request, 'gui/HTML/teamProfil.html', {'error': 'Equipe pas trouvée.'})
+
+
+@login_required
+def updateTeam(request,membership_id,role):
+	membership = getMembership(membership_id)
+	if(membership is not None):
+		team=membership.team
+		adminMembership = getRelation(request.user,team)
+		if(adminMembership is not None and adminMembership.role < 2):
+			if(role!=0):
+				membership.role=role
+				membership.save()
+				return redirect(teamProfil_view,team_id=team.id)
+			else:
+				membership.delete()
+				return redirect(teamProfil_view,team_id=team.id)
+	else:
+		return redirect(profil_view)

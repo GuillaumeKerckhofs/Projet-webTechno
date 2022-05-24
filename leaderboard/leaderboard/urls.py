@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from gui.views import homeView,register_request,login_request,logout_request,profil_view,teamProfil_view,edit_profile,createTeam_request,allTeamProfil_view
+from gui.views import homeView,register_request,login_request,logout_request,profil_view,edit_profile,createTeam_request,teamProfil_view,joinTeam,updateTeam
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path("profil/",profil_view,name="profil"),
     path("profil/edit/",edit_profile,name="edit"),
     path("createTeam/",createTeam_request,name="createTeam"),
-    path("teamProfil/",allTeamProfil_view,name="allTeamProfil"),
     path("teamProfil/<int:team_id>/",teamProfil_view,name="teamProfil"),
+    path("joinTeam/<int:team_id>/",joinTeam,name="joinTeam"),
+    path("updateTeam/<int:membership_id>/<int:role>",updateTeam,name="updateTeam"),
 ]

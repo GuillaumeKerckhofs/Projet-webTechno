@@ -37,14 +37,12 @@
                             <td>Role</td>
                             <td>Rejoint le</td>
                         </tr>
-                        {% for membersh in membership %}
-                            {% if membersh.role < 4 %}
+                        {% for t in user_team %}
                                 <tr>
-                                    <td><a href="{% url 'teamProfil' membersh.team.id %}">{{membersh.team.name}} </a> </td>
-                                    <td> {{membersh.getRole}} </td>
-                                    <td>  {{membersh.date_joined}}</td>
+                                    <td><a href="{% url 'teamProfil' t.team.id %}">{{t.team.name}} </a> </td>
+                                    <td> {{t.getRole}} </td>
+                                    <td>  {{t.date_joined}}</td>
                                 </tr>
-                            {% endif %}
                         {% endfor %}
                     </table>
                 </div>
@@ -53,6 +51,33 @@
             <div>
                 <a href="/createTeam">Créer une équipe </a>
             </div>
+
+            <div class="card p-4">
+                <h4 class="card-title font-weight-bold text-center">Les autres équipes</h4>
+                <hr>
+                <div class="card-text">
+                    <table>
+                        <tr>
+                            <td>Nom</td>
+                            <td>Status</td>
+                        </tr>
+                        {% for t in waiting_team %}
+                            <tr>
+                                <td><a href="{% url 'teamProfil' t.id %}">{{t.name}} </a> </td>
+                                <td>  En attente</td>
+                            </tr>
+                        {% endfor %}
+                        {% for t in other_team %}-
+                                <tr>
+                                    <td><a href="{% url 'teamProfil' t.id %}">{{t.name}} </a> </td>
+                                    <input type="hidden" value="{{ t.id }}" name="Team-id">
+                                    <td><a href="{% url 'joinTeam' team_id=t.id %}">Rejoindre</a></td>
+                                </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+            </br>
 
         </div>
         <!-- Informations -->
