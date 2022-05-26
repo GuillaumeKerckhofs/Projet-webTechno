@@ -186,7 +186,7 @@ def updateTeam(request,membership_id,role):
 	if(membership is not None):
 		team=membership.team
 		adminMembership = getRelation(request.user,team)
-		if(adminMembership is not None and adminMembership.role < 2):
+		if(adminMembership is not None and adminMembership.role < 2 and adminMembership.role < membership.role):
 			if(role!=0):
 				membership.role=role
 				membership.save()
@@ -194,5 +194,8 @@ def updateTeam(request,membership_id,role):
 			else:
 				membership.delete()
 				return redirect(teamProfil_view,team_id=team.id)
+		elif(role==0):
+			membership.delete()
+			return redirect(profil_view)
 	else:
 		return redirect(profil_view)

@@ -25,6 +25,11 @@
                                     <td>{{m.member.last_name}} {{m.member.first_name}} </td>
                                     <td> {{m.getRole}} </td>
                                     <td>  {{m.date_joined}}</td>
+                                    {% if m.member.id == user.id %}
+                                    <td> 
+                                        <a href="{% url 'updateTeam' membership_id=m.id role=0 %}"> Quitter </a>
+                                    </td>
+                                    {% endif %}
                                 </tr>
                                 {% endif %}
                             {% endfor %}
@@ -45,8 +50,9 @@
                                     <td>{{m.member.last_name}} {{m.member.first_name}} </td>
                                     <td> {{m.getRole}} </td>
                                     {% if role < 3 %}
-                                    <td>  <a href="{% url 'updateTeam' membership_id=m.id role=3 %}"> Accepter </a>
-                                            <a href="{% url 'updateTeam' membership_id=m.id role=0 %}"> Refuser </a>
+                                    <td> 
+                                        <a href="{% url 'updateTeam' membership_id=m.id role=3 %}"> Accepter </a>
+                                        <a href="{% url 'updateTeam' membership_id=m.id role=0 %}"> Refuser </a>
                                     </td>
                                     {% endif %}
                                 </tr>
@@ -59,11 +65,9 @@
                 </br>
                 {% if role == 1 %}
                     <button class="btn btn-primary" type="submit" value="delete"> Supprimer l'équipe</button>
-                {% endif %}
-                {% if role == 4 %}
+                {% elif role == 4 %}
                     <p> En attente d'une réponse</p>
-                {% endif %}
-                {% if role == 5 %}
+                {% elif role == 5 %}
                     <a href="{% url 'joinTeam' team_id=team.id %}">Rejoindre </a>
                 {% endif %}
             </br>
