@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,AuthenticationForm
 from .models import CustomUser,Team,Membership
 from django.forms import ModelForm
+from django.db import models
 
 
 # Create your forms here.
@@ -35,21 +36,6 @@ class UserLoginForm(AuthenticationForm):
             'user_name': 'Pseudo',
         }
 
-	#user_name=forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Pseudo'}))
-	#password=forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'mot de passe'}))
-	#fields=("user_name","password")
-
-	#class Meta:
-	#	model = CustomUser
-	#	fields=("user_name","password")
-
-	#	def clean(self):
-	#		if self.is_valid():
-	#			user_name=self.cleaned_data('user_name')
-	#			password=self.cleaned_data('password')
-	#			if not authenticate(user_name=user_name,password=password):
-	#				raise forms.ValidationError("Invalid LOGIN")
-
 class customUserChangeForm(UserChangeForm):
 	class Meta:
 		model = CustomUser
@@ -61,7 +47,7 @@ class customUserChangeForm(UserChangeForm):
 			'is_dev': 'Etes-vous un développeur ?',
         }
 
-class createTeamForm(ModelForm):
+class teamForm(ModelForm):
 
 	class Meta:
 		model=Team
@@ -69,4 +55,19 @@ class createTeamForm(ModelForm):
 		labels={
 			'name': 'Nom de l\'équipe',
 		}
-	
+
+class updateUserRoleForm(ModelForm):
+
+
+	class Meta:
+		model= Membership
+		fields =("role",)
+		labels={
+			'role': 'Nouveau role',
+		}
+
+	def __init__(self, *args, **kwargs):
+		self.user = kwargs.pop('user', None)
+		super(updateUserRoleForm, self).__init__(*args, **kwargs)
+		limited_choices = [(Membership.ADMIN, 'Admin'),(Membership.MEMBER, 'Membre')]
+		self.fields['role'] = forms.ChoiceField(choices=limited_choices)

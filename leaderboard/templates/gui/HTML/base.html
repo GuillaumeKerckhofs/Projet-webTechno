@@ -148,7 +148,12 @@
         </footer>
     </div>
 
-    <script src="{% static 'main/js/events.js' %}"></script>
+    <div id="modal" class="modal fade">
+        <div id="dialog" class="modal-dialog" hx-target="this"></div>
+    </div>
+
+    <script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
+    <script src="{% static 'JS/modal.js' %}"></script>
 
 </body>
 </html>

@@ -1,0 +1,14 @@
+<form hx-post="{{ request.path }}" class="modal-content">
+    {% csrf_token %}
+    <div class="modal-header">
+      <h5 class="modal-title">Modifier le role de {{membership.member.last_name}} {{membership.member.first_name}}</h5>
+    </div>
+    <div class="modal-body">
+      {{ updateUserRoleForm.as_p }}
+    </div>
+    <div class="modal-footer">
+        <a href="{% url 'removeUser' membership_id=membership.id%}"> Exclure </a>
+        <button type="button" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Modifier</button>
+    </div>
+  </form>

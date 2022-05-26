@@ -36,12 +36,17 @@
                             <td>Nom</td>
                             <td>Role</td>
                             <td>Rejoint le</td>
+                            <td>&nbsp</td>
                         </tr>
                         {% for t in user_team %}
                                 <tr>
                                     <td><a href="{% url 'teamProfil' t.team.id %}">{{t.team.name}} </a> </td>
                                     <td> {{t.getRole}} </td>
                                     <td>  {{t.date_joined}}</td>
+                                    <td> 
+                                        {% if t.role == 1 %}
+                                        <button hx-get="{% url 'updateTeam' team_id=t.team.id%}" hx-target="#dialog"> Modifier l'équipe </button></td>
+                                        {% endif %}
                                 </tr>
                         {% endfor %}
                     </table>
@@ -49,7 +54,8 @@
             </div>
             </br>
             <div>
-                <a href="/createTeam">Créer une équipe </a>
+                <button hx-get="{% url 'createTeam' %}" hx-target="#dialog">
+                    Créer une équipe                  </button>
             </div>
 
             <div class="card p-4">
@@ -67,7 +73,7 @@
                                 <td>  En attente</td>
                             </tr>
                         {% endfor %}
-                        {% for t in other_team %}-
+                        {% for t in other_team %}
                                 <tr>
                                     <td><a href="{% url 'teamProfil' t.id %}">{{t.name}} </a> </td>
                                     <input type="hidden" value="{{ t.id }}" name="Team-id">

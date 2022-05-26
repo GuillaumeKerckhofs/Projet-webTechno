@@ -1,5 +1,7 @@
+import json
+
 from django.shortcuts import  render, redirect
-from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,createTeamForm
+from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,teamForm,updateUserRoleForm
 from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import CreateView
 from django.contrib import messages
@@ -8,6 +10,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
 from users.models import Membership,Team
+from django.http import HttpResponse
 
 def getTeam(team_id):
 	try:
@@ -138,15 +141,61 @@ def profil_view(request):
 @login_required
 def createTeam_request(request):
 	if request.method == 'POST':
-		form = createTeamForm(request.POST)
+		form = teamForm(request.POST)
 
 		if form.is_valid():
-			teamForm=form.save()
-			membership=Membership.objects.create(member=request.user,team=teamForm,role=Membership.OWNER)
-			return redirect(profil_view)
+			team=form.save()
+			membership=Membership.objects.create(member=request.user,team=team,role=Membership.OWNER)
+			return HttpResponse(
+                status=204,
+                headers={
+                    'HX-Trigger': json.dumps({
+                        "teamAdded": None,
+                        "showMessage": f"{team.name} ajouté."
+                    })
+                })
 	else:
-		form = createTeamForm()
-	return render(request,template_name='gui/HTML/createTeam.html',context={'createTeam_form':form})
+		form = teamForm()
+	return render(request,template_name='gui/HTML/createTeam.html',context={'teamForm':form})
+
+@login_required
+def updateTeam(request,team_id):
+	team=getTeam(team_id)
+	if request.method == "POST":
+	    form = teamForm(request.POST, instance=team)
+	    if form.is_valid():
+	        form.save()
+	        return HttpResponse(
+	            status=204,
+	            headers={
+	                'HX-Trigger': json.dumps({
+	                    "TeamChanged": None,
+	                    "showMessage": f"{team.name} updated."
+	                })
+	            }
+	        )
+	else:
+	    form = teamForm(instance=team)
+	return render(request, 'GUI/html/updateTeam.html', {'teamForm': form,'team': team,})
+
+@login_required
+def removeTeam(request,team_id):
+	team=getTeam(team_id)
+	membership=getRelation(request.user,team)
+	if(membership is not None):
+		if(membership.role==1):
+			team.delete()
+			return HttpResponse(
+				status=204,
+				headers={
+					'HX-Trigger': json.dumps({
+						"TeamRemoved": None,
+						"showMessage": f"{team.name} deleted."
+					})
+				})
+	else:
+		return redirect(homeView)
+
 
 @login_required
 def teamProfil_view(request,team_id):
@@ -178,24 +227,51 @@ def joinTeam(request,team_id):
 			return redirect(profil_view)
 	else:
 		return render(request, 'gui/HTML/teamProfil.html', {'error': 'Equipe pas trouvée.'})
+	
+@login_required
+def addUser(request,membership_id):
+	membership = getMembership(membership_id)
+	admin=getRelation(request.user,membership.team)
+	if(admin.role<3):
+		membership.role=membership.MEMBER
+		membership.save()
+		return redirect(teamProfil_view,membership.team.id)
+	else:
+		return redirect(homeView)
 
 
 @login_required
-def updateTeam(request,membership_id,role):
+def updateUserRole(request,membership_id):
 	membership = getMembership(membership_id)
-	if(membership is not None):
-		team=membership.team
-		adminMembership = getRelation(request.user,team)
-		if(adminMembership is not None and adminMembership.role < 2 and adminMembership.role < membership.role):
-			if(role!=0):
-				membership.role=role
-				membership.save()
-				return redirect(teamProfil_view,team_id=team.id)
-			else:
-				membership.delete()
-				return redirect(teamProfil_view,team_id=team.id)
-		elif(role==0):
-			membership.delete()
-			return redirect(profil_view)
+
+	if request.method == "POST":
+	    form = updateUserRoleForm(request.POST, instance=membership)
+	    if form.is_valid():
+	        form.save()
+	        return HttpResponse(
+	            status=204,
+	            headers={
+	                'HX-Trigger': json.dumps({
+	                    "UserRoleChanged": None,
+	                    "showMessage": f"{membership.role} updated."
+	                })
+	            }
+	        )
 	else:
+	    form = updateUserRoleForm(instance=membership)
+	return render(request, 'GUI/html/updateUserRole.html', {'updateUserRoleForm': form,'membership': membership,})
+
+@login_required
+def removeUser(request,membership_id):
+	membership=getMembership(membership_id)
+	if(membership.member.id == request.user.id):
+		membership.delete()
 		return redirect(profil_view)
+	else:
+		admin=getRelation(request.user,membership.team)
+		if(admin.role<membership.role):
+			membership.delete()
+			return redirect(teamProfil_view,membership.team.id)
+		else:
+			return redirect(homeView)
+

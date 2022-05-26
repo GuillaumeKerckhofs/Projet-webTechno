@@ -1,20 +1,13 @@
-{% extends "gui/HTML/base.html" %}
-
-{% load bootstrap5 %}
-
-{% block title %} {% endblock %}
-{% block content %}
-
-{% load crispy_forms_tags %}
-
-    <!--Register-->
-    <div class="container py-5">
-        <h1>Création d'équipe</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{ createTeam_form|crispy }}
-            <button class="btn btn-primary" type="submit">Créer l'équipe</button>
-        </form>
+<form hx-post="{{ request.path }}" class="modal-content">
+    {% csrf_token %}
+    <div class="modal-header">
+      <h5 class="modal-title">Créer une équipe</h5>
     </div>
-
-{% endblock %}
+    <div class="modal-body">
+      {{ teamForm.as_p }}
+    </div>
+    <div class="modal-footer">
+      <button type="button" data-bs-dismiss="modal">Annuler</button>
+      <button type="submit" class="btn btn-primary">Créer</button>
+    </div>
+  </form>

@@ -25,9 +25,17 @@
                                     <td>{{m.member.last_name}} {{m.member.first_name}} </td>
                                     <td> {{m.getRole}} </td>
                                     <td>  {{m.date_joined}}</td>
-                                    {% if m.member.id == user.id %}
+                                    {% if m.member.id == user.id and role != 1 %}
                                     <td> 
-                                        <a href="{% url 'updateTeam' membership_id=m.id role=0 %}"> Quitter </a>
+                                        <a href="{% url 'removeUser' membership_id=m.id%}"> Quitter </a>
+                                    </td>
+                                    {% elif role == 1 and m.role != 1 %}
+                                    <td> 
+                                        <button hx-get="{% url 'updateUserRole' membership_id=m.id %}" hx-target="#dialog"> Modifier Role </button>
+                                    </td>
+                                    {% elif role < m.role %}
+                                    <td>
+                                        <a href="{% url 'removeUser' membership_id=m.id%}"> Exclure </a>
                                     </td>
                                     {% endif %}
                                 </tr>
@@ -51,8 +59,8 @@
                                     <td> {{m.getRole}} </td>
                                     {% if role < 3 %}
                                     <td> 
-                                        <a href="{% url 'updateTeam' membership_id=m.id role=3 %}"> Accepter </a>
-                                        <a href="{% url 'updateTeam' membership_id=m.id role=0 %}"> Refuser </a>
+                                        <a href="{% url 'addUser' membership_id=m.id %}"> Accepter </a>
+                                        <a href="{% url 'removeUser' membership_id=m.id %}"> Refuser </a>
                                     </td>
                                     {% endif %}
                                 </tr>
@@ -64,9 +72,9 @@
 
                 </br>
                 {% if role == 1 %}
-                    <button class="btn btn-primary" type="submit" value="delete"> Supprimer l'équipe</button>
+                    <button hx-get="{% url 'updateTeam' team_id=team.id%}" hx-target="#dialog"> Modifier l'équipe </button>
                 {% elif role == 4 %}
-                    <p> En attente d'une réponse</p>
+                    <p> En attente d'une réponse </p>
                 {% elif role == 5 %}
                     <a href="{% url 'joinTeam' team_id=team.id %}">Rejoindre </a>
                 {% endif %}
