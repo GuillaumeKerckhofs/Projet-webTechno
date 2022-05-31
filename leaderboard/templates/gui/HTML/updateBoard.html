@@ -1,0 +1,14 @@
+<form hx-post="{{ request.path }}" class="modal-content">
+    {% csrf_token %}
+    <div class="modal-header">
+      <h5 class="modal-title">Modifier une équipe</h5>
+    </div>
+    <div class="modal-body">
+      {{ updateBoardForm.as_p }}
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" hx-post="{% url 'removeBoard' board_id=board.id %}">Supprimer le leaderboard</button>
+        <button type="button" data-bs-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Modifier</button>
+    </div>
+  </form>

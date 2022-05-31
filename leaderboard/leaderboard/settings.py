@@ -19,7 +19,15 @@ TEMPLATES_URL ='/templates/'
 
 STATIC_URL = '/static/'
 
+PUBLIC_URL='/public/'
+
 STATICFILES_DIRS = BASE_DIR / "static",
+
+PUBLIC_FILES_DIRS = BASE_DIR / "public",
+
+DATASET_FILES_DIRS = BASE_DIR / "public/dataset",
+
+TEST_FILES_DIRS = BASE_DIR / "public/test",
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gui',
     'users',
+    'boards',
     'crispy_forms',
     'bootstrap5',
 ]

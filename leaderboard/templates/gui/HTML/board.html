@@ -1,0 +1,50 @@
+{% extends "gui/HTML/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+<div class="container" id="Informations">
+</br>
+    <div class="card p-4">
+        <h4 class="card-title font-weight-bold text-center">Leaderboard : {{board.name}}</h4>
+        <hr>
+        <div class="card-text">
+
+            <table>
+                <tr>
+                    <td>#</td>
+                    <td>Equipe</td>
+                    <td>Nom du Modèle</td>
+                    <td>Score</td>
+                    <td>Tentatives</td>
+                </tr>
+                {% if score != None %}
+                    {% for s in score %}
+                        <tr>
+                            <td> {{ forloop.counter }}</td>
+                            <td> <a href="{% url 'teamProfil' s.team.id %}">{{s.team.name}} </a> </td>
+                            <td>  {{s.best_model}}</td>
+                            <td>  {{s.score}}</td>
+                            <td>  {{s.number_entries}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+
+            </br>
+
+            {% if user.is_staff%}
+                <a href="{% url 'removeBoard' board_id=board.id%}"> Supprimer le leaderboard </a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -92,14 +92,14 @@
             <nav>
                 <div>
                     <a href="/home" class="umons_red_btn" >Accueil</a>
-                    <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Classification</a>
-                    <a href="#" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Localisation</a>
                     {% if not user.is_authenticated %}
                         <a href="/login" class="umons_grey_btn mobile">Se connecter</a>    
                         <a href="/regisyer" class="umons_grey_btn mobile">S'inscrire'</a>
                     {% else %}
+                        <a class="umons_grey_btn" href="/profil">Profil</a>
                         {% if user.is_dev %}
-                            <a href="#">Créer un leaderboard</a>
+                            <button hx-get="{% url 'createBoard' %}" hx-target="#dialog" class="umons_grey_btn">
+                            Créer un leaderboard                </button>
                         {% endif %}
                     {% endif %}
                 </div>

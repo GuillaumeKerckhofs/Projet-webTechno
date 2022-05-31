@@ -45,7 +45,7 @@
                                     <td>  {{t.date_joined}}</td>
                                     <td> 
                                         {% if t.role == 1 %}
-                                        <button hx-get="{% url 'updateTeam' team_id=t.team.id%}" hx-target="#dialog"> Modifier l'équipe </button></td>
+                                        <button hx-get="{% url 'updateTeam' team_id=t.team.id%}" hx-target="#dialog">Modifier l'équipe </button></td>
                                         {% endif %}
                                 </tr>
                         {% endfor %}
@@ -65,7 +65,7 @@
                     <table>
                         <tr>
                             <td>Nom</td>
-                            <td>Status</td>
+                            <td>Statut</td>
                         </tr>
                         {% for t in waiting_team %}
                             <tr>

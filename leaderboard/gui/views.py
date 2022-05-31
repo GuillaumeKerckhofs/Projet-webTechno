@@ -2,6 +2,7 @@ import json
 
 from django.shortcuts import  render, redirect
 from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,teamForm,updateUserRoleForm
+from boards.forms import BoardForm,updateBoardForm
 from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import CreateView
 from django.contrib import messages
@@ -10,6 +11,7 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.conf import settings
 from users.models import Membership,Team
+from boards.models import submittedModel,Link,Category,Boards
 from django.http import HttpResponse
 
 def getTeam(team_id):
@@ -32,10 +34,13 @@ def getAllTeam(user):
 			if membership:
 				if membership.role==4:
 					waiting_team.append(t)
+					print(t.id)
 				else:
 					user_team.append(membership)
+					print(t.id)
 		except:	
 			other_team.append(t)
+			print(t.id)
 	return user_team,waiting_team,other_team
 
 def getRelation(user,team):
@@ -51,6 +56,33 @@ def getMembership(id):
 	except:
 		membership=None
 	return membership
+
+def getBoard(board_id):
+	try:
+		board=Boards.objects.get(id=board_id)
+	except:
+		board=None
+	return board
+
+def getBoards():
+	localisation=[]
+	classification=[]
+	boards=Boards.objects.all()
+
+	for b in boards:
+		if b.category.category==1:
+			localisation.append(b)
+		elif b.category.category==2:
+			classification.append(b)
+	return localisation,classification
+
+def getScoreBoards(id_board):
+	try:
+		board=Boards.objects.get(id=id_board)
+		score=submittedModel.objects.filter(board=board).order_by('-score')
+	except:
+		score=None
+	return score
 
 
 
@@ -75,7 +107,8 @@ def anonymous_required(function=None, redirect_url=None):
 
 # Create your views here.
 def homeView(request):
-	return render(request,'gui/HTML/home.html')
+	localisation,classification=getBoards()
+	return render(request,'gui/HTML/home.html',context={"localisation":localisation,"classification":classification})
 
 
 @anonymous_required
@@ -274,4 +307,68 @@ def removeUser(request,membership_id):
 			return redirect(teamProfil_view,membership.team.id)
 		else:
 			return redirect(homeView)
+
+
+@login_required
+def createBoard_request(request):
+	if request.method == 'POST' and request.user.is_dev:
+		form = BoardForm(request.POST)
+
+		if form.is_valid():
+			board=form.save()
+			return HttpResponse(
+                status=204,
+                headers={
+                    'HX-Trigger': json.dumps({
+                        "boardAdded": None,
+                        "showMessage": f"{board.name} ajouté."
+                    })
+                })
+	else:
+		form = BoardForm()
+	return render(request,template_name='gui/HTML/createBoard.html',context={'BoardForm':form})
+
+login_required
+def updateBoard(request,board_id):
+	board=getBoard(board_id)
+	if request.method == "POST" and request.user.is_staff:
+	    form = updateBoardForm(request.POST, instance=board)
+	    if form.is_valid():
+	        form.save()
+	        return HttpResponse(
+	            status=204,
+	            headers={
+	                'HX-Trigger': json.dumps({
+	                    "boardChanged": None,
+	                    "showMessage": f"{board.name} updated."
+	                })
+	            }
+	        )
+	else:
+	    form = updateBoardForm(instance=team)
+	return render(request, 'GUI/html/updateBoard.html', {'updateBoardForm': form})
+
+@login_required
+def removeBoard(request,board_id):
+	board=getBoard(board_id)
+	if(request.user.is_staff):
+		board.delete()
+		return HttpResponse(
+			status=204,
+			headers={
+				'HX-Trigger': json.dumps({
+					"boardRemoved": None,
+					"showMessage": f"{board.name} deleted."
+				})
+			})
+	else:
+		return redirect(homeView)
+
+
+def boardProfil_view(request,board_id):
+	board=getBoard(board_id)
+	score=getScoreBoards(board_id)
+	context = {'board': board,'score':score}
+
+	return render(request,'gui/HTML/board.html',context)
 

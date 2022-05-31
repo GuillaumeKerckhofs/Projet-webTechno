@@ -14,8 +14,44 @@
 				Leaderboard : 
 			</h1>
 		</div>
+	</div>
 
+	<div class="card p-4">
+		<h4 class="card-title font-weight-bold text-center">Localisation</h4>
+		<hr>
+		<div class="card-text">
+			<table>
+				<tr>
+					<td>Nom du leaderboard</td>
+					<td>&nbsp</td>
+				</tr>
+				{% for b in localisation %}
+						<tr>
+							<td>{{b.name}} </td>
+							<td><a href="{% url 'boardProfil' b.id %}"> Voir en détails </a></td>
+						</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
 
+	<div class="card p-4">
+		<h4 class="card-title font-weight-bold text-center">Classification</h4>
+		<hr>
+		<div class="card-text">
+			<table>
+				<tr>
+					<td>Nom du leaderboard</td>
+					<td>&nbsp</td>
+				</tr>
+				{% for b in classification %}
+						<tr>
+							<td>{{b.name}} </td>
+							<td><a href="{% url 'boardProfil' b.id %}"> Voir en détails </a></td>
+						</tr>
+				{% endfor %}
+			</table>
+		</div>
 	</div>
 
 	<!-- Slider main container -->
