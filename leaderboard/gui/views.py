@@ -34,13 +34,10 @@ def getAllTeam(user):
 			if membership:
 				if membership.role==4:
 					waiting_team.append(t)
-					print(t.id)
 				else:
 					user_team.append(membership)
-					print(t.id)
 		except:	
 			other_team.append(t)
-			print(t.id)
 	return user_team,waiting_team,other_team
 
 def getRelation(user,team):
@@ -246,7 +243,7 @@ def teamProfil_view(request,team_id):
 			return render(request,'gui/HTML/teamProfil.html',context)
 
 	else:
-		return render(request, 'gui/HTML/teamProfil.html', {'error': 'Equipe pas trouvée.'})
+		return redirect(profil_view)
 
 @login_required
 def joinTeam(request,team_id):
@@ -345,8 +342,8 @@ def updateBoard(request,board_id):
 	            }
 	        )
 	else:
-	    form = updateBoardForm(instance=team)
-	return render(request, 'GUI/html/updateBoard.html', {'updateBoardForm': form})
+	    form = updateBoardForm(instance=board)
+	return render(request, 'GUI/html/updateBoard.html', {'updateBoardForm': form,'board':board})
 
 @login_required
 def removeBoard(request,board_id):
@@ -369,6 +366,7 @@ def boardProfil_view(request,board_id):
 	board=getBoard(board_id)
 	score=getScoreBoards(board_id)
 	context = {'board': board,'score':score}
-
-	return render(request,'gui/HTML/board.html',context)
+	if board is not None:
+		return render(request,'gui/HTML/board.html',context)
+	return redirect(homeView)
 

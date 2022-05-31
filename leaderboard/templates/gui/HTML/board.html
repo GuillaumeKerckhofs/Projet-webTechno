@@ -10,17 +10,20 @@
 </br>
     <div class="card p-4">
         <h4 class="card-title font-weight-bold text-center">Leaderboard : {{board.name}}</h4>
+        <p>Description:{{board.description}}</p>
         <hr>
         <div class="card-text">
 
             <table>
-                <tr>
-                    <td>#</td>
-                    <td>Equipe</td>
-                    <td>Nom du Modèle</td>
-                    <td>Score</td>
-                    <td>Tentatives</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Equipe</td>
+                        <td>Nom du Modèle</td>
+                        <td>Score</td>
+                        <td>Tentatives</td>
+                    </tr>
+                </thead>
                 {% if score != None %}
                     {% for s in score %}
                         <tr>
@@ -37,6 +40,7 @@
             </br>
 
             {% if user.is_staff%}
+                <button hx-get="{% url 'updateBoard' board_id=board.id%}" hx-target="#dialog"> Modifier le leaderboard </button>
                 <a href="{% url 'removeBoard' board_id=board.id%}"> Supprimer le leaderboard </a>
             {% endif %}
 

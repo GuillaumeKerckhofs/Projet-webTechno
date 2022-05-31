@@ -109,31 +109,6 @@
     left: auto !important;
 }
 
-#carouselWorkshop {
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.carousel-control-next-icon, .carousel-control-prev-icon {
-    background: url("images/next.svg") no-repeat center/25px;
-    width: 25px;
-    height: 25px;
-    border: 2px solid #fff;
-    border-radius: 100%;
-    background-color: #fff;
-    opacity: 0.7;
-}
-
-.carousel-control-prev-icon {
-    transform: scaleX(-1);
-}
-
-#landing-section-1 {
-    display: grid;
-    grid-template-columns: 5fr 4fr;
-}
-
-
 /* MINE */
 
 #landing_top {
@@ -207,72 +182,6 @@
 #landing_top .swiper-container .swiper-slide, #landing_top .swiper-container .swiper-slide img {
     width: 100%;
     border-radius: 15px;
-}
-
-#watch_video {
-    background: url(../images/arrows/arrow_filled_right_white.svg) no-repeat center right+10px/23px;
-    background-color: #BD0E3A;
-    color: #fff;
-    font-size: 17px;
-    font-weight: 800;
-    padding: 10px 40px 10px 20px;
-    border-radius: 100px;
-    width: max-content;
-    margin-top: 35px;
-    user-select: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#watch_video:hover {
-    background-size: 26px;
-    transition: 0.3s;
-    background-color: #da1848;
-}
-
-#landing_sponsors > div:first-child {
-    display: grid;
-    grid-template-columns: auto max-content auto;
-    align-items: center;
-    grid-gap: 20px;
-    padding: 0 100px;
-}
-
-#landing_sponsors > div:first-child > div {
-    border-top: 1px solid #868686;
-}
-
-#landing_sponsors > div:first-child > span {
-    font-family: 'Sarai Regular';
-    font-size: 35px;
-    letter-spacing: 10px;
-    margin-right: -10px;
-}
-
-#landing_sponsors > div:last-child {
-    display: grid;
-    grid-template-columns: max-content auto max-content;
-    align-items: center;
-}
-
-#landing_sponsors > div:last-child > img:last-child {
-    transform: scaleX(-1);
-}
-
-#landing_sponsors > div:last-child > img {
-    width: 50px;
-}
-
-#landing_sponsors > div:last-child > div {
-    display: grid;
-    justify-items: center;
-    grid-auto-flow: column;
-    align-items: center;
-    grid-gap: 20px;
-}
-
-#landing_sponsors > div:last-child > div img {
-    width: 150px;
 }
 
 p {

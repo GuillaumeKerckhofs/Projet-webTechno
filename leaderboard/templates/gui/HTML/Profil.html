@@ -32,20 +32,21 @@
                 <hr>
                 <div class="card-text">
                     <table>
-                        <tr>
-                            <td>Nom</td>
-                            <td>Role</td>
-                            <td>Rejoint le</td>
-                            <td>&nbsp</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <td>Nom</td>
+                                <td>Role</td>
+                                <td>Rejoint le</td>
+                                <td></td>
+                            </tr>
+                        </thead>
                         {% for t in user_team %}
                                 <tr>
                                     <td><a href="{% url 'teamProfil' t.team.id %}">{{t.team.name}} </a> </td>
                                     <td> {{t.getRole}} </td>
                                     <td>  {{t.date_joined}}</td>
-                                    <td> 
                                         {% if t.role == 1 %}
-                                        <button hx-get="{% url 'updateTeam' team_id=t.team.id%}" hx-target="#dialog">Modifier l'équipe </button></td>
+                                        <td><button hx-get="{% url 'updateTeam' team_id=t.team.id%}" hx-target="#dialog" class="buttonLink">Modifier l'équipe </button></td>
                                         {% endif %}
                                 </tr>
                         {% endfor %}
@@ -63,10 +64,12 @@
                 <hr>
                 <div class="card-text">
                     <table>
-                        <tr>
-                            <td>Nom</td>
-                            <td>Statut</td>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <td>Nom</td>
+                                <td>Statut</td>
+                            </tr>
+                        </thead>
                         {% for t in waiting_team %}
                             <tr>
                                 <td><a href="{% url 'teamProfil' t.id %}">{{t.name}} </a> </td>
