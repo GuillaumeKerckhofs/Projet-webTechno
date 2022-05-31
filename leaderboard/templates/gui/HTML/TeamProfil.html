@@ -14,30 +14,30 @@
                     <div class="card-text">
 
                         <table>
-                            <tr>
-                                <td>Nom</td>
-                                <td>Role</td>
-                                <td>Rejoint le</td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <td>Nom</td>
+                                    <td>Role</td>
+                                    <td>Rejoint le</td>
+                                    <td></td> 
+                                </tr>
+                            </thead>
                             {% for m in membership %}
                                 {% if m.role < 4 %}
                                 <tr>
                                     <td>{{m.member.last_name}} {{m.member.first_name}} </td>
                                     <td> {{m.getRole}} </td>
-                                    <td>  {{m.date_joined}}</td>
-                                    {% if m.member.id == user.id and role != 1 %}
-                                    <td> 
-                                        <a href="{% url 'removeUser' membership_id=m.id%}"> Quitter </a>
-                                    </td>
-                                    {% elif role == 1 and m.role != 1 %}
-                                    <td> 
-                                        <button hx-get="{% url 'updateUserRole' membership_id=m.id %}" hx-target="#dialog"> Modifier Role </button>
-                                    </td>
-                                    {% elif role < m.role %}
+                                    <td>  {{m.date_joined}} </td> 
+
                                     <td>
+                                    {% if m.member.id == user.id and role != 1 %}
+                                        <a href="{% url 'removeUser' membership_id=m.id%}"> Quitter </a>
+                                    {% elif role == 1 and m.role != 1 %}
+                                        <button hx-get="{% url 'updateUserRole' membership_id=m.id %}" hx-target="#dialog" class="buttonLink"> Modifier Role </button>
+                                    {% elif role < m.role %}
                                         <a href="{% url 'removeUser' membership_id=m.id%}"> Exclure </a>
-                                    </td>
                                     {% endif %}
+                                    </td> 
                                 </tr>
                                 {% endif %}
                             {% endfor %}
@@ -48,10 +48,12 @@
 
                         <p> Personnes en attente </p>
                         <table>
-                            <tr>
-                                <td>Nom</td>
-                                <td>Etat</td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <td>Nom</td>
+                                    <td>Etat</td>
+                                </tr>
+                            </thead>
                         {% for m in membership %}
                             {% if m.role == 4 %}
                                 <tr>
