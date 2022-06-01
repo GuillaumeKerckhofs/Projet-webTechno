@@ -39,8 +39,11 @@
 
             </br>
 
-            {% if user.is_staff%}
-                <button hx-get="{% url 'updateBoard' board_id=board.id%}" hx-target="#dialog" class="buttonLink"> Modifier le leaderboard </button>
+            {% if user.is_authenticated %}
+                <button hx-get="{% url 'submitModel' board_id=board.id%}" hx-target="#dialog" class="buttonLink"> Soumettre un modèle</button><br><br><br>
+                {% if user.is_staff%}
+                    <button hx-get="{% url 'updateBoard' board_id=board.id%}" hx-target="#dialog" class="buttonLink"> Modifier le leaderboard </button>
+                {% endif %}
             {% endif %}
 
         </div>

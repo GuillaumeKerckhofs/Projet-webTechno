@@ -1,7 +1,9 @@
 from django import forms
-from .models import Category,Link,Boards,submittedModel
-from django.forms import ModelForm
 from django.db import models
+from .models import Category,Link,Boards,submittedModel
+from django.forms import ModelForm,Form
+from django.db import models
+from users.models import Membership,Team
 
 class BoardForm(ModelForm):
     class Meta:
@@ -27,3 +29,15 @@ class updateBoardForm(ModelForm):
             "description": "description",
             "closingDate": "Date de fin",
         }
+
+class SubmissionForm(Form):
+    team=forms.ModelChoiceField(queryset=Membership.objects.all())
+    submitModel=forms.FileField(label="Votre modèle")
+    class Meta:
+        fields = ("team","submitModel")
+        
+
+    def __init__(self, *args, **kwargs):
+        current_user = kwargs.pop('current_user', None)
+        super(SubmissionForm, self).__init__(*args, **kwargs)
+        self.fields['team']=forms.ModelChoiceField(queryset=Membership.objects.filter(member=current_user,role__lt=4))

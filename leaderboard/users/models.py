@@ -89,3 +89,6 @@ class Membership(models.Model):
             return 'Membre'
         else:
             return 'En attente'
+
+    def __str__(self):
+        return self.team.name

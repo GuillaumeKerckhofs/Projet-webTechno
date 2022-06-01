@@ -2,7 +2,7 @@ import json
 
 from django.shortcuts import  render, redirect
 from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,teamForm,updateUserRoleForm
-from boards.forms import BoardForm,updateBoardForm
+from boards.forms import BoardForm,updateBoardForm,SubmissionForm
 from django.urls import reverse_lazy,reverse
 from django.views.generic.edit import CreateView
 from django.contrib import messages
@@ -13,6 +13,8 @@ from django.conf import settings
 from users.models import Membership,Team
 from boards.models import submittedModel,Link,Category,Boards
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_protect
+from django.template import RequestContext
 
 def getTeam(team_id):
 	try:
@@ -97,6 +99,11 @@ def anonymous_required(function=None, redirect_url=None):
        return actual_decorator(function)
    return actual_decorator
 
+
+def handle_uploaded_file(f):  
+    with open('public/upload/'+f.name, 'wb+') as destination:  
+        for chunk in f.chunks():
+            destination.write(chunk) 
 
 
 
@@ -325,7 +332,7 @@ def createBoard_request(request):
 		form = BoardForm()
 	return render(request,template_name='gui/HTML/createBoard.html',context={'BoardForm':form})
 
-login_required
+@login_required
 def updateBoard(request,board_id):
 	board=getBoard(board_id)
 	if request.method == "POST" and request.user.is_staff:
@@ -361,7 +368,7 @@ def removeBoard(request,board_id):
 	else:
 		return redirect(homeView)
 
-
+@csrf_protect
 def boardProfil_view(request,board_id):
 	board=getBoard(board_id)
 	score=getScoreBoards(board_id)
@@ -370,3 +377,19 @@ def boardProfil_view(request,board_id):
 		return render(request,'gui/HTML/board.html',context)
 	return redirect(homeView)
 
+
+@csrf_protect
+@login_required
+def submitModel(request,board_id):
+	board=getBoard(board_id)
+	csrf_context=RequestContext(request)
+	if request.method == "POST":
+		form = SubmissionForm(request.POST, request.FILES,current_user=request.user)
+		print(form)
+		if form.is_valid():
+			print("ici")
+			handle_uploaded_file(form.cleaned_data["submitModel"])
+			return redirect(boardProfil_view,board_id)
+	else:
+	    form = SubmissionForm(current_user=request.user)
+	return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board},csrf_context)
