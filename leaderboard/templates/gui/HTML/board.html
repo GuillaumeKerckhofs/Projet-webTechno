@@ -28,7 +28,7 @@
                     {% for s in score %}
                         <tr>
                             <td> {{ forloop.counter }}</td>
-                            <td> <a href="{% url 'teamProfil' s.team.id %}">{{s.team.name}} </a> </td>
+                            <td> <a href="{% url 'teamProfil' s.team.id %}" class="linkProfil">{{s.team.name}} </a> </td>
                             <td>  {{s.best_model}}</td>
                             <td>  {{s.score}}</td>
                             <td>  {{s.number_entries}}</td>
@@ -40,8 +40,7 @@
             </br>
 
             {% if user.is_staff%}
-                <button hx-get="{% url 'updateBoard' board_id=board.id%}" hx-target="#dialog"> Modifier le leaderboard </button>
-                <a href="{% url 'removeBoard' board_id=board.id%}"> Supprimer le leaderboard </a>
+                <button hx-get="{% url 'updateBoard' board_id=board.id%}" hx-target="#dialog" class="buttonLink"> Modifier le leaderboard </button>
             {% endif %}
 
         </div>

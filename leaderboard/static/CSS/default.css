@@ -57,18 +57,26 @@ h1 {
 
 .umons_red_btn {
     background-color: #BD0E3A!important;
+    color: white;
+    border: none;
 }
 
 .umons_red_btn:hover {
     background-color: #C9113F!important;
+    color: white;
+    border: none;
 }
 
 .umons_blue_btn {
     background-color: #00366D!important;
+    color: white;
+    border: none;
 }
 
 .umons_blue_btn:hover {
     background-color: #093F75!important;
+    color: white;
+    border: none;
 }
 
 .umons_yellow_btn {

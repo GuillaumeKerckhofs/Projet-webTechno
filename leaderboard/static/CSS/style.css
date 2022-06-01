@@ -471,3 +471,11 @@ p {
     /* margin-top: 30px;  */
     background: url('/static/main/images/protocol/ai.png') no-repeat 15px/40px;
 }
+
+.linkProfil{
+    color: black;
+}
+
+.linkProfil:hover {
+    color: grey;
+}

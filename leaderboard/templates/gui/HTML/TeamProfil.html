@@ -74,7 +74,7 @@
 
                 </br>
                 {% if role == 1 %}
-                    <button hx-get="{% url 'updateTeam' team_id=team.id%}" hx-target="#dialog"> Modifier l'équipe </button>
+                    <button hx-get="{% url 'updateTeam' team_id=team.id%}" hx-target="#dialog" class="buttonLink"> Modifier l'équipe </button>
                 {% elif role == 4 %}
                     <p> En attente d'une réponse </p>
                 {% elif role == 5 %}
