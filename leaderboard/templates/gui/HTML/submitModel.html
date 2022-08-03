@@ -1,13 +1,20 @@
-<form hx-post="{{ request.path }}" class="modal-content" action="" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="modal-header">
-      <h5 class="modal-title">Soumettre le modèle</h5>
-    </div>
-    <div class="modal-body">
-      {{ submissionForm.as_p }}
-    </div>
-    <div class="modal-footer">
-        <button type="button" data-bs-dismiss="modal" class="btn umons_grey_btn">Annuler</button>
-        <button type="submit" class="btn umons_blue_btn">Soumettre</button>
-    </div>
+{% extends "gui/HTML/base.html" %}
+
+{% load bootstrap5 %}
+
+{% block title %} {% endblock %}
+
+{% block content %}      
+
+{% load crispy_forms_tags %}
+<div class="container py-5">
+  <h1>Soumission de modèle</h1>
+  <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        {{ submissionForm.as_p }}
+        <button type="submit" class="btn umons_blue_btn" id="upload">Soumettre</button>
   </form>
+</div>
+
+{% endblock %}
+  

@@ -1,5 +1,4 @@
 import json
-
 from django.shortcuts import  render, redirect
 from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,teamForm,updateUserRoleForm
 from boards.forms import BoardForm,updateBoardForm,SubmissionForm
@@ -13,8 +12,8 @@ from django.conf import settings
 from users.models import Membership,Team
 from boards.models import submittedModel,Link,Category,Boards
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_protect
-from django.template import RequestContext
+from django.core.files.storage import FileSystemStorage
+
 
 def getTeam(team_id):
 	try:
@@ -368,7 +367,7 @@ def removeBoard(request,board_id):
 	else:
 		return redirect(homeView)
 
-@csrf_protect
+
 def boardProfil_view(request,board_id):
 	board=getBoard(board_id)
 	score=getScoreBoards(board_id)
@@ -378,18 +377,27 @@ def boardProfil_view(request,board_id):
 	return redirect(homeView)
 
 
-@csrf_protect
 @login_required
 def submitModel(request,board_id):
 	board=getBoard(board_id)
-	csrf_context=RequestContext(request)
 	if request.method == "POST":
-		form = SubmissionForm(request.POST, request.FILES,current_user=request.user)
-		print(form)
+		form=SubmissionForm(request.POST,request.FILES, current_user=request.user)
 		if form.is_valid():
-			print("ici")
-			handle_uploaded_file(form.cleaned_data["submitModel"])
+			upload_file=request.FILES['file']
+			fs=FileSystemStorage()
+			file_name=fs.save(upload_file.name,upload_file)
+			linkToPython=board.category.path
+			linkToTest=board.category.link_to_dataset.path
+			print(linkToPython)
+			print(linkToTest)
+			print(fs.url(file_name))
+			if(board.category.category==1):
+				print("localisation")
+				#p= Popen(["python","localisation.py ",linkToPython,'--source',linkToTest + "Test_Dataset/images/",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			elif(board.category.category==2):
+				print("classification")
+				#p= Popen(["python","classification.py ",linkToPython,linkToTest,filePath,inputSize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			return redirect(boardProfil_view,board_id)
 	else:
 	    form = SubmissionForm(current_user=request.user)
-	return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board},csrf_context)
+	return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board})

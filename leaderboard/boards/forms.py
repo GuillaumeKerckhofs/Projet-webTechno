@@ -32,10 +32,9 @@ class updateBoardForm(ModelForm):
 
 class SubmissionForm(Form):
     team=forms.ModelChoiceField(queryset=Membership.objects.all())
-    submitModel=forms.FileField(label="Votre modèle")
+    file=forms.FileField(label="Votre modèle")
     class Meta:
-        fields = ("team","submitModel")
-        
+        fields = ("team","file")
 
     def __init__(self, *args, **kwargs):
         current_user = kwargs.pop('current_user', None)

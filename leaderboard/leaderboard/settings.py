@@ -21,6 +21,10 @@ STATIC_URL = '/static/'
 
 PUBLIC_URL='/public/'
 
+MEDIA_URL='/public/upload/'
+
+MEDIA_ROOT ='public/upload/'
+
 STATICFILES_DIRS = BASE_DIR / "static",
 
 PUBLIC_FILES_DIRS = BASE_DIR / "public",
@@ -28,6 +32,7 @@ PUBLIC_FILES_DIRS = BASE_DIR / "public",
 DATASET_FILES_DIRS = BASE_DIR / "public/dataset",
 
 TEST_FILES_DIRS = BASE_DIR / "public/test",
+
 
 
 # Quick-start development settings - unsuitable for production
