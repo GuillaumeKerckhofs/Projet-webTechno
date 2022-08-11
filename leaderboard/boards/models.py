@@ -45,7 +45,8 @@ class Boards(models.Model):
 class submittedModel(models.Model):
     best_model=models.CharField(max_length=150)
     number_entries = models.IntegerField(default=1,blank=True)
-    score = models.IntegerField(default=None,blank=True)
+    score = models.FloatField(default=None,blank=True)
+    last_score = models.FloatField(default=None,blank=True)
     date_published = models.DateField(default=datetime.now, blank=True)
     team=models.ForeignKey(Team, on_delete=models.CASCADE)
     board=models.ForeignKey(Boards,on_delete=models.CASCADE,default=None)

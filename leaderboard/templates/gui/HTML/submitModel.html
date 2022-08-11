@@ -11,7 +11,12 @@
   <h1>Soumission de modèle</h1>
   <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
-        {{ submissionForm.as_p }}
+        {{ submissionForm.team|as_crispy_field }}<br>
+        {{ submissionForm.file|as_crispy_field }}<br>
+        {% if board.category.category == 2 %}
+          {{ submissionForm.entrySize|as_crispy_field }}<br>
+        {% endif %}
+        <strong> <p style="color:red;">{{error}}</p> </strong> <br>
         <button type="submit" class="btn umons_blue_btn" id="upload">Soumettre</button>
   </form>
 </div>

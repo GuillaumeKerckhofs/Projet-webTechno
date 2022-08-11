@@ -42,5 +42,6 @@ urlpatterns = [
     path("updateBoard/<int:board_id>/",updateBoard,name="updateBoard"),
     path("removeBoard/<int:board_id>/",removeBoard,name="removeBoard"),
     path("boardProfil/<int:board_id>/",boardProfil_view,name="boardProfil"),
+    path("boardProfil/<int:board_id>/<int:team_id>/",boardProfil_view,name="boardProfil"),
     path("submitModel/<int:board_id>/",submitModel,name="submitModel"),
 ]

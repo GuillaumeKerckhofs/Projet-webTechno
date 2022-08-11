@@ -31,7 +31,9 @@ PUBLIC_FILES_DIRS = BASE_DIR / "public",
 
 DATASET_FILES_DIRS = BASE_DIR / "public/dataset",
 
-TEST_FILES_DIRS = BASE_DIR / "public/test",
+TEST_FILES_DIRS = BASE_DIR / "public/python",
+
+
 
 
 

@@ -13,6 +13,10 @@ from users.models import Membership,Team
 from boards.models import submittedModel,Link,Category,Boards
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
+import subprocess
+from datetime import datetime  
+from django.core.exceptions import FieldError
+
 
 
 def getTeam(team_id):
@@ -368,11 +372,18 @@ def removeBoard(request,board_id):
 		return redirect(homeView)
 
 
-def boardProfil_view(request,board_id):
+def boardProfil_view(request,board_id,team_id=None):
 	board=getBoard(board_id)
-	score=getScoreBoards(board_id)
-	context = {'board': board,'score':score}
 	if board is not None:
+		lastModel=None
+		if team_id is not None:
+			team=getTeam(team_id)		
+			lastModel=submittedModel.objects.get(team=team,board=board)
+
+
+		available=datetime.today().date() < board.closingDate
+		score=getScoreBoards(board_id)
+		context = {'board': board,'score':score,'available':available,'lastModel':lastModel}
 		return render(request,'gui/HTML/board.html',context)
 	return redirect(homeView)
 
@@ -380,24 +391,55 @@ def boardProfil_view(request,board_id):
 @login_required
 def submitModel(request,board_id):
 	board=getBoard(board_id)
+	available=datetime.today().date() < board.closingDate
+	if(not(available)):
+		return redirect(boardProfil_view,board_id)
 	if request.method == "POST":
 		form=SubmissionForm(request.POST,request.FILES, current_user=request.user)
 		if form.is_valid():
+			entrySize=str(form.cleaned_data.get('entrySize'))
+			team=form.cleaned_data.get('team')
 			upload_file=request.FILES['file']
 			fs=FileSystemStorage()
 			file_name=fs.save(upload_file.name,upload_file)
 			linkToPython=board.category.path
 			linkToTest=board.category.link_to_dataset.path
-			print(linkToPython)
-			print(linkToTest)
-			print(fs.url(file_name))
+			pathToUpload=str(settings.PUBLIC_FILES_DIRS[0])+"\\upload\\"
+			filePath=pathToUpload+file_name
+
+
+
 			if(board.category.category==1):
-				print("localisation")
-				#p= Popen(["python","localisation.py ",linkToPython,'--source',linkToTest + "Test_Dataset/images/",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				p= subprocess.Popen(["python",linkToPython,'--source',linkToTest + "Test_Dataset/images/",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			elif(board.category.category==2):
-				print("classification")
-				#p= Popen(["python","classification.py ",linkToPython,linkToTest,filePath,inputSize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			return redirect(boardProfil_view,board_id)
+				p= subprocess.Popen(["py",linkToPython,linkToTest,filePath,entrySize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+				stdout, stderr = p.communicate()
+
+				stderr=stderr.split("\n")
+				for line in stderr:
+					print(line)
+					if(line.startswith("ValueError")):
+						error="Erreur lors de l\'éxécution ! Essayez une autre taille d'entrée"
+						return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
+				stdout=stdout.split("\n")
+				print(stdout)
+				score=round(float(stdout[-2]),4)
+
+
+			model=submittedModel.objects.filter(team=team.team,board=board).first()
+			if model is None:
+				model=submittedModel.objects.create(team=team.team,board=board,score=score,best_model=upload_file.name,last_score=score)
+			else:					
+				if(model.score< score):
+					model.score=score
+					model.best_model=upload_file.name
+				model.last_score=score
+				model.date_published = datetime.now()
+				model.number_entries = model.number_entries + 1
+				model.save()
+
+			return redirect(boardProfil_view,board_id,team.team.id)
 	else:
-	    form = SubmissionForm(current_user=request.user)
-	return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board})
+		error=""
+		form = SubmissionForm(current_user=request.user,initial={'entrySize':'224'})
+	return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
