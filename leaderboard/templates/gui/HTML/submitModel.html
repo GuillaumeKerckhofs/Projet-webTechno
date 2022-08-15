@@ -15,6 +15,8 @@
         {{ submissionForm.file|as_crispy_field }}<br>
         {% if board.category.category == 2 %}
           {{ submissionForm.entrySize|as_crispy_field }}<br>
+        {% else %}
+        {{ submissionForm.entrySize.as_hidden }}
         {% endif %}
         <strong> <p style="color:red;">{{error}}</p> </strong> <br>
         <button type="submit" class="btn umons_blue_btn" id="upload">Soumettre</button>

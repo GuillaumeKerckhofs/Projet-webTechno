@@ -1,4 +1,5 @@
 import json
+import os
 from django.shortcuts import  render, redirect
 from users.forms import NewUserForm,UserLoginForm,customUserChangeForm,teamForm,updateUserRoleForm
 from boards.forms import BoardForm,updateBoardForm,SubmissionForm
@@ -374,16 +375,22 @@ def removeBoard(request,board_id):
 
 def boardProfil_view(request,board_id,team_id=None):
 	board=getBoard(board_id)
+	message=""
 	if board is not None:
 		lastModel=None
 		if team_id is not None:
 			team=getTeam(team_id)		
 			lastModel=submittedModel.objects.get(team=team,board=board)
+			message=lastModel.team.name+":Votre score est de " + str(lastModel.last_score)
+			if(lastModel.last_score >= lastModel.score):
+				message=message+".C'est votre meilleur score !"
+			else:
+				message=message+".Vous n'avez pas amélioré votre score de "+str(lastModel.score)+"."
 
 
 		available=datetime.today().date() < board.closingDate
 		score=getScoreBoards(board_id)
-		context = {'board': board,'score':score,'available':available,'lastModel':lastModel}
+		context = {'board': board,'score':score,'available':available,'message':message}
 		return render(request,'gui/HTML/board.html',context)
 	return redirect(homeView)
 
@@ -394,8 +401,10 @@ def submitModel(request,board_id):
 	available=datetime.today().date() < board.closingDate
 	if(not(available)):
 		return redirect(boardProfil_view,board_id)
-	if request.method == "POST":
+	elif request.method == "POST":
 		form=SubmissionForm(request.POST,request.FILES, current_user=request.user)
+		
+
 		if form.is_valid():
 			entrySize=str(form.cleaned_data.get('entrySize'))
 			team=form.cleaned_data.get('team')
@@ -408,22 +417,20 @@ def submitModel(request,board_id):
 			filePath=pathToUpload+file_name
 
 
-
 			if(board.category.category==1):
-				p= subprocess.Popen(["python",linkToPython,'--source',linkToTest + "Test_Dataset/images/",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+				print(linkToTest + "Test_Dataset\\images\\")
+				p= subprocess.Popen(["py",linkToPython,'--source',linkToTest + "\\Test_Dataset\\images\\",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+				stdout, stderr = p.communicate()
 			elif(board.category.category==2):
 				p= subprocess.Popen(["py",linkToPython,linkToTest,filePath,entrySize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
 				stdout, stderr = p.communicate()
-
-				stderr=stderr.split("\n")
-				for line in stderr:
-					print(line)
-					if(line.startswith("ValueError")):
-						error="Erreur lors de l\'éxécution ! Essayez une autre taille d'entrée"
-						return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
-				stdout=stdout.split("\n")
-				print(stdout)
+				
+			stdout=stdout.split("\n")
+			try:
 				score=round(float(stdout[-2]),4)
+			except:
+				error="Erreur lors de l\'éxécution ! Essayez une autre taille d'entrée ou un autre modèle"
+				return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
 
 
 			model=submittedModel.objects.filter(team=team.team,board=board).first()
@@ -437,6 +444,8 @@ def submitModel(request,board_id):
 				model.date_published = datetime.now()
 				model.number_entries = model.number_entries + 1
 				model.save()
+
+			os.remove(filePath)
 
 			return redirect(boardProfil_view,board_id,team.team.id)
 	else:

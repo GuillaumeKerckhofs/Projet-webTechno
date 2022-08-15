@@ -13,19 +13,9 @@
         <p>Description:{{board.description}}</p>
         <hr>
         <div class="card-text">
-
-            {% if lastModel != None %}
-                <strong><p> Votre score est de {{lastModel.last_score}}.
-                    {% if lastModel.last_score == lastModel.score %}
-                        C'est votre meilleur score !
-
-                    {% else %}
-
-                        Vous n'aves pas améliorer votre score de {{lastModel.score}}.
-                
-                    {% endif %}
-                </p></strong>
-            {% endif %}
+            <strong><p> 
+                {{message}}
+            </p></strong>
 
             <table>
                 <thead>
