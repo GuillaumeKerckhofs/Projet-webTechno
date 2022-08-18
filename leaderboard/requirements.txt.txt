@@ -1,3 +1,0 @@
-django
-django-crispy-forms==1.14.0
-django-bootstrap-v5

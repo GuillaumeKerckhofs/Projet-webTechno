@@ -418,8 +418,7 @@ def submitModel(request,board_id):
 
 
 			if(board.category.category==1):
-				print(linkToTest + "Test_Dataset\\images\\")
-				p= subprocess.Popen(["py",linkToPython,'--source',linkToTest + "\\Test_Dataset\\images\\",'--weights',filePath,'--img-size', '800','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+				p= subprocess.Popen(["py",linkToPython,'--source',linkToTest + "\\Test_Dataset\\images\\",'--weights',filePath,'--img-size', '640','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
 				stdout, stderr = p.communicate()
 			elif(board.category.category==2):
 				p= subprocess.Popen(["py",linkToPython,linkToTest,filePath,entrySize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
@@ -429,6 +428,7 @@ def submitModel(request,board_id):
 			try:
 				score=round(float(stdout[-2]),4)
 			except:
+				print(stderr)
 				error="Erreur lors de l\'éxécution ! Essayez une autre taille d'entrée ou un autre modèle"
 				return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
 
