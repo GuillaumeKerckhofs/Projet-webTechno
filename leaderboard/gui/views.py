@@ -410,10 +410,8 @@ def submitModel(request,board_id):
 			upload_file=request.FILES['file']
 			fs=FileSystemStorage()
 			file_name=fs.save(upload_file.name,upload_file)
-			pythonName=os.path.basename(board.category.path)
-			linkName=os.path.basename(board.category.link_to_dataset.path)
-			linkToPython=(str(settings.TEST_FILES_DIRS[0])+"/"+pythonName).replace("\\","/")
-			linkToTest=(str(settings.DATASET_FILES_DIRS[0])+"/"+linkName).replace("\\","/")
+			linkToPython=(str(settings.BASE_DIR)+"/"+board.category.path).replace("\\","/")
+			linkToTest=(str(settings.BASE_DIR)+"/"+board.category.link_to_dataset.path).replace("\\","/")
 			pathToUpload=str(settings.PUBLIC_FILES_DIRS[0])+"\\upload\\"
 			filePath=pathToUpload+file_name
 
