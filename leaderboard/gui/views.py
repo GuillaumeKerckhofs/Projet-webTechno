@@ -418,10 +418,10 @@ def submitModel(request,board_id):
 
 
 			if(board.category.category==1):
-				p= subprocess.Popen(["py",linkToPython,'--source',linkToTest + "\\Test_Dataset\\images\\",'--weights',filePath,'--img-size', '640','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+				p= subprocess.Popen(["python3",linkToPython,'--source',linkToTest + "\\Test_Dataset\\images\\",'--weights',filePath,'--img-size', '640','--conf', '0.4', '--save-txt', '--project', linkToTest], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
 				stdout, stderr = p.communicate()
 			elif(board.category.category==2):
-				p= subprocess.Popen(["py",linkToPython,linkToTest,filePath,entrySize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
+				p= subprocess.Popen(["python3",linkToPython,linkToTest,filePath,entrySize,"3"], stdout=subprocess.PIPE, stderr=subprocess.PIPE,universal_newlines=True)
 				stdout, stderr = p.communicate()
 				
 			stdout=stdout.split("\n")
