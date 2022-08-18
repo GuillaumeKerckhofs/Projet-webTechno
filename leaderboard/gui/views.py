@@ -412,7 +412,7 @@ def submitModel(request,board_id):
 			file_name=fs.save(upload_file.name,upload_file)
 			linkToPython=(str(settings.BASE_DIR)+"/"+board.category.path).replace("\\","/")
 			linkToTest=(str(settings.BASE_DIR)+"/"+board.category.link_to_dataset.path).replace("\\","/")
-			pathToUpload=str(settings.PUBLIC_FILES_DIRS[0])+"\\upload\\"
+			pathToUpload=str(settings.PUBLIC_FILES_DIRS[0])+"/upload/"
 			filePath=pathToUpload+file_name
 
 
