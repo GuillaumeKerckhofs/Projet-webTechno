@@ -429,6 +429,7 @@ def submitModel(request,board_id):
 			except:
 				print(stderr)
 				error="Erreur lors de l\'éxécution ! Essayez une autre taille d'entrée ou un autre modèle"
+				os.remove(filePath)
 				return render(request, 'GUI/html/submitModel.html', {'submissionForm': form,'board':board,'error':error})
 
 

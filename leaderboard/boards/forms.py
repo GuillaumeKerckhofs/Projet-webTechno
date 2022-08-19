@@ -44,7 +44,7 @@ class updateBoardForm(ModelForm):
 class SubmissionForm(Form):
     team=forms.ModelChoiceField(queryset=Membership.objects.all())
     file=forms.FileField(label="Votre modèle", validators=[validate_file_extension])
-    entrySize=forms.IntegerField(label="Taille de l'entrée",help_text="Example: 224 pour VGG16")
+    entrySize=forms.IntegerField(label="Taille de l'entrée",help_text="Example: <br/> 224 pour VGG16,ResNet152,EfficientNetB0,EfficientNetB1,EfficientNetB2,DenseNet121 <br/> 299 pour Xception <br/> 331 pour NASNetLarge ")
     class Meta:
         fields = ("team","file","entrySize")
 
