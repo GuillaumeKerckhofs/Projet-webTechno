@@ -10,6 +10,9 @@ class Link(models.Model):
     #path= models.FilePathField(path=str(settings.DATASET_FILES_DIRS[0]), recursive=True, max_length=100, allow_folders=True)
     path= models.FilePathField(path="public/dataset", recursive=True, max_length=100, allow_folders=True)
 
+    def __str__(self):
+        return '%s' % self.name
+
 class Category(models.Model):
     name=models.CharField(max_length=150,unique=True)
     #path= models.FilePathField(path=str(settings.TEST_FILES_DIRS[0]), recursive=False, max_length=100)
